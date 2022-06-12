@@ -1,0 +1,54 @@
+
+#define setPin(b) ( (b)<8 ? PORTD |=(1<<(b)) : PORTB |=(1<<(b-8)) )
+
+#define clrPin(b) ( (b)<8 ? PORTD &=~(1<<(b)) : PORTB &=~(1<<(b-8)) )
+
+#define tstPin(b) ( (b)<8 ? (PORTD &(1<<(b)))!=0 : (PORTB &(1<<(b-8)))!=0 )
+
+int potPin = A0;
+int latchPin = 5;
+int clockPin = 6;
+int dataPin = 4;
+int outputEnablePin = 3;
+
+#define PIN_TST 5
+byte leds = 0;
+
+
+void setup() 
+{
+   pinMode(PIN_TST,OUTPUT);
+  pinMode(latchPin, OUTPUT);
+  pinMode(dataPin, OUTPUT);  
+  pinMode(clockPin, OUTPUT);
+  pinMode(outputEnablePin, OUTPUT); 
+}
+
+void loop() 
+{
+   int reading  = analogRead(potPin);
+  int numLEDSLit = reading / 1000;  //1023 / 9, number of LEDs to turn on
+  double exBright = ((double)reading/114)-numLEDSLit; //decimal number of LEDs to turn on
+  leds = 0;
+  int i;
+  for (i = 0; i < numLEDSLit; i++)
+  {
+    bitSet(leds, i); 
+  }
+  for(i=0;i<255;i++){
+   int eBright = (int)(exBright*i);//Conversion from decimal to int brightness
+ 
+  
+  }updateShiftRegister();
+}
+
+void updateShiftRegister()
+{
+   
+  
+    clrPin(PIN_TST);
+ 
+   shiftOut(dataPin, clockPin, LSBFIRST, leds);
+setPin(PIN_TST);
+
+}
